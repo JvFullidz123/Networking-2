@@ -1,0 +1,115 @@
+Legend:
+N.A. - Network Address
+D.G. - Default Gateway
+S.M. - Subnet Mask
+
+N.A. 192.168.0.0 
+D.G. 192.168.0.1 
+S.M. 255.255.255.0
+
+IT DEPARTMENT
+PC10 192.168.0.2 
+PC11 192.168.0.3
+
+
+HR DEPARTMENT
+PC12 192.168.0.4
+PC13 192.168.0.5
+
+
+N.A. 192.168.3.0
+D.G. 192.168.3.1
+S.M. 255.255.255.0
+
+HR DEPARTMENT
+
+PC12(1) 192.168.3.2
+PC13(1) 192.168.3.4
+
+N.A. 192.168.4.0
+D.G. 192.168.4.1
+S.M. 255.255.255.0
+
+IT DEPARTMENT
+
+PC12(1)(1) 192.168.4.2
+PC13(1)(1) 192.168.4.3
+
+
+ASSIGNING IP ADDRESS
+
+Router4 
+int fa0/0
+ip address 192.168.0.1 255.255.255.0
+do wr
+exit
+
+int se0/1/0
+ip address 192.168.1.1 255.255.255.0
+
+
+
+
+
+Router4(1)
+
+int fa0/0
+ip address 192.168.3.1 255.255.255.0
+do wr
+exit
+
+int se0/1/0
+ip address 192.168.1.2 255.255.255.0
+do wr
+exit
+
+int se0/1/1
+ip address 192.168.2.1 255.255.255.0
+do wr
+exit
+
+
+
+
+Router4(1)(1)
+
+int se0/1/0
+ip address 192.168.2.2 255.255.255.0
+do wr
+exit
+
+int fa0/0
+ip address 192.168.4.1 255.255.255.0
+do wr
+exit
+
+ACL COMMANDS
+
+Router4(1)
+
+no access-list 1
+
+access-list 1 deny 192.168.4.0 0.0.0.255
+access-list 1 deny host 192.168.0.2
+access-list 1 deny host 192.168.0.3
+access-list 1 permit any
+
+int fa0/0
+ip access-group 1 out 
+do wr 
+exit
+
+
+Router4(1)(1)
+
+no access-list 1
+
+access-list 1 deny 192.168.3.0 0.0.0.255
+access-list 1 deny host 192.168.0.4
+access-list 1 deny host 192.168.0.5
+access-list 1 permit any
+
+int fa0/0
+ip access-group 1 out
+do wr
+exit
